@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html>
+
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Create a grid with cells to input names</title>
+
+  <style>
+    body {
+    background: #111;
+    color: white;
+    font-family: 'Segoe UI', sans-serif;
+    text-align: center;
+    margin: 0;
+    padding: 20px;
+}
+
+.page-title {
+    color: gold;
+    margin-bottom: 15px;
+}
+
+.image-row {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.image-row img {
+  
+    border-radius: 10px;
+    border: 2px solid gold;
+    
+}
+
+h3 {
+    color: gold;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 5px;
+    max-width: 500px;
+    margin: 10px auto 0;
+}
+
+.cell {
+    background: #222;
+    border-radius: 8px;
+    padding: 5px;
+    cursor: pointer;
+    border: 1px solid #555;
+    transition: 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.cell:hover {
+    background: #333;
+}
+
+.cell.filled {
+    background: #004d00;
+    border: 1px solid gold;
+}
+
+.cell div:first-child {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.cell .name {
+    font-size: 0.8em;
+    color: gold;
+    margin-top: 2px;
+}
+
+.cell .phone {
+    font-size: 0.7em;
+    color: #ccc;
+}
+
+.popup {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.7);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.popup-content {
+    background: #1c1c1c;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+    border: 2px solid gold;
+    width: 400px;
+    text-align: center;
+    position: relative;
+    animation: fadeIn 0.3s ease;
+}
+
+.popup-content h3 {
+    margin-bottom: 20px;
+    color: gold;
+    font-size: 1.3em;
+}
+
+.input-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 15px;
+}
+
+.popup-content input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid gold;
+    background: #2a2a2a;
+    color: white;
+    font-size: 1em;
+    outline: none;
+}
+
+.popup-content input:focus {
+    border-color: #ffdd66;
+    box-shadow: 0 0 6px gold;
+}
+
+.popup-content button {
+    background: linear-gradient(145deg, gold, #d4af37);
+    color: black;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1em;
+    transition: 0.2s;
+}
+
+.popup-content button:hover {
+    background: linear-gradient(145deg, #ffeb99, gold);
+    transform: translateY(-2px);
+}
+
+@keyframes fadeIn {
+    from { transform: scale(0.9); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+#record-list {
+    list-style: none;
+    padding: 0;
+    max-width: 500px;
+    margin: 0 auto;
+    text-align: left;
+}
+
+#record-list li {
+    background: #222;
+    padding: 8px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    border: 1px solid #444;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Popup รหัสผ่าน */
+#password-popup {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.7);
+  justify-content: center;
+  align-items: center;
+  z-index: 1100;
+}
+
+#password-popup .popup-content {
+  background: #1c1c1c;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+  border: 2px solid gold;
+  width: 400px;
+  text-align: center;
+  position: relative;
+  animation: fadeIn 0.3s ease;
+}
+
+  </style>
+
+  
+</head>
+<body>
+  <h2 class="page-title">🎯 เลขลุ้นแท็บเล็ต มูลค่า 5,099</h2>
+<h3> เบอร์ล่ะ 100บาท </h3>
+<div class="image-row">
+    <img src="https://i.postimg.cc/7PQ8MpCL/1.png" alt="img1" width="300" height="300">
+
+    <img src="https://i.postimg.cc/ZYfBPKFy/11.png" alt="img2" width="300" height="300">
+    <img src="https://i.postimg.cc/h4MxC0gv/10.png" alt="img3" width="300" height="300">
+    <img src="https://i.postimg.cc/mZS3vs3b/9.png" alt="img4" width="300" height="300">
+</div>
+
+<div class="grid" id="grid"></div>
+
+<h3 style="margin-top:20px; display: flex; justify-content: space-between; align-items: center; max-width: 500px; margin-left: auto; margin-right: auto;">
+  📋 รายการบันทึก
+  <button id="confirm-delete-btn" style="display:none; padding: 6px 12px; font-weight: bold; cursor: pointer;">✅ ยืนยันการลบ</button>
+</h3>
+
+<ul id="record-list" style="max-width:500px; margin: 10px auto 0; text-align:left;"></ul>
+
+<!-- Popup ใส่ชื่อและเบอร์ -->
+<div class="popup" id="popup">
+    <div class="popup-content">
+        <h3 id="popup-title">ใส่ข้อมูล</h3>
+        <div class="input-row">
+            <input type="text" id="name-input" placeholder="ชื่อ">
+            <input type="tel" id="phone-input" placeholder="เบอร์โทร">
+        </div>
+        <button onclick="saveData()">ยืนยัน</button>
+    </div>
+</div>
+
+<!-- Popup ใส่รหัสผ่านก่อนลบ -->
+<div class="popup" id="password-popup">
+  <div class="popup-content">
+    <h3>กรุณาใส่รหัสผ่าน</h3>
+    <input type="password" id="password-input" placeholder="รหัสผ่าน" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid gold; background:#2a2a2a; color:white; margin-bottom:15px; font-size:1em;">
+    <button id="password-confirm-btn">ตกลง</button>
+    <button id="password-cancel-btn" style="margin-left:10px; background:#555; color:white; padding: 10px 20px; border-radius:8px; border:none; cursor:pointer;">ยกเลิก</button>
+  </div>
+</div>
+
+
+  <script>
+    const grid = document.getElementById("grid");
+const popup = document.getElementById("popup");
+const nameInput = document.getElementById("name-input");
+const phoneInput = document.getElementById("phone-input");
+const popupTitle = document.getElementById("popup-title");
+const recordList = document.getElementById("record-list");
+const confirmDeleteBtn = document.getElementById("confirm-delete-btn");
+
+const passwordPopup = document.getElementById("password-popup");
+const passwordInput = document.getElementById("password-input");
+const passwordConfirmBtn = document.getElementById("password-confirm-btn");
+const passwordCancelBtn = document.getElementById("password-cancel-btn");
+
+let selectedCell = null;
+let savedData = JSON.parse(localStorage.getItem("numberData")) || {};
+let selectedForDelete = new Set();
+
+// สร้างตาราง 00-99
+for (let i = 0; i < 100; i++) {
+    const num = i.toString().padStart(2, '0');
+    const cell = document.createElement("div");
+    cell.className = "cell";
+    cell.innerHTML = `
+        <div>${num}</div>
+        <div class="name"></div>
+        <div class="phone"></div>
+    `;
+
+    if (savedData[num]) {
+        cell.querySelector(".name").innerText = savedData[num].name;
+        cell.querySelector(".phone").innerText = savedData[num].phone;
+        cell.classList.add("filled");
+    }
+
+    cell.onclick = () => openPopup(cell, num);
+    grid.appendChild(cell);
+}
+
+renderRecordList();
+
+function openPopup(cell, num) {
+    selectedCell = { cell, num };
+    popupTitle.innerText = `ใส่ข้อมูลสำหรับเลข ${num}`;
+    nameInput.value = savedData[num]?.name || "";
+    phoneInput.value = savedData[num]?.phone || "";
+    popup.style.display = "flex";
+    nameInput.focus();
+}
+
+function saveData() {
+    const name = nameInput.value.trim();
+    const phone = phoneInput.value.trim();
+
+    if (name && phone && selectedCell) {
+        selectedCell.cell.querySelector(".name").innerText = name;
+        selectedCell.cell.querySelector(".phone").innerText = phone;
+        selectedCell.cell.classList.add("filled");
+
+        savedData[selectedCell.num] = { name, phone };
+        localStorage.setItem("numberData", JSON.stringify(savedData));
+
+        renderRecordList();
+    }
+    popup.style.display = "none";
+}
+
+function renderRecordList() {
+    recordList.innerHTML = "";
+    selectedForDelete.clear();
+    confirmDeleteBtn.style.display = "none";
+
+    for (let num in savedData) {
+        const li = document.createElement("li");
+        li.innerHTML = `${num} : ${savedData[num].name} (${savedData[num].phone})`;
+
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.onchange = (e) => {
+            if (e.target.checked) {
+                selectedForDelete.add(num);
+            } else {
+                selectedForDelete.delete(num);
+            }
+            confirmDeleteBtn.style.display = selectedForDelete.size > 0 ? "block" : "none";
+        };
+
+        li.appendChild(checkbox);
+        recordList.appendChild(li);
+    }
+}
+
+// เมื่อกดปุ่มยืนยันการลบ ให้เปิด popup รหัสผ่าน
+confirmDeleteBtn.onclick = () => {
+  passwordInput.value = "";
+  passwordPopup.style.display = "flex";
+  passwordInput.focus();
+};
+
+// ปุ่มยกเลิก popup รหัสผ่าน
+passwordCancelBtn.onclick = () => {
+  passwordPopup.style.display = "none";
+};
+
+// ปุ่มยืนยันรหัสผ่าน
+passwordConfirmBtn.onclick = () => {
+  const pwd = passwordInput.value.trim();
+  if (pwd === "@Sonicch99") {  // กำหนดรหัสผ่านที่นี่
+    // ลบข้อมูลจริง ๆ
+    selectedForDelete.forEach(num => {
+      delete savedData[num];
+      document.querySelectorAll(".cell").forEach(c => {
+        const cellNum = c.querySelector("div:first-child").innerText;
+        if (cellNum === num) {
+          c.classList.remove("filled");
+          c.querySelector(".name").innerText = "";
+          c.querySelector(".phone").innerText = "";
+        }
+      });
+    });
+    localStorage.setItem("numberData", JSON.stringify(savedData));
+    renderRecordList();
+    passwordPopup.style.display = "none";
+  } else {
+    alert("รหัสผ่านไม่ถูกต้อง!");
+    passwordInput.focus();
+  }
+};
+
+// ปิด popup เมื่อคลิกนอกกล่องข้อมูล (สำหรับทั้งสอง popup)
+popup.addEventListener("click", (e) => {
+    if (e.target === popup) {
+        popup.style.display = "none";
+    }
+});
+passwordPopup.addEventListener("click", (e) => {
+    if (e.target === passwordPopup) {
+        passwordPopup.style.display = "none";
+    }
+});
+
+  </script>
+</body>
+</html>
